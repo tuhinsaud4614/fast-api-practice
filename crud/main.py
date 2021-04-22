@@ -2,8 +2,12 @@ import os
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from src.utils import join_path
+from src.utils.path import join_path
 from src.routers import user
+from src.database import Base, engine  
+
+# Database Connection
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 

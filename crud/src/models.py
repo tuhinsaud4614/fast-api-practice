@@ -1,44 +1,19 @@
-import sqlite3
+from sqlalchemy import Column, String
 from uuid import uuid4
 
-from .database import Database
+from .database import Base
 
 
-class USER:
-    def __init__(self):
-        if Database.instance and Database.cur:
-            try:
-                Database.cur.execute(f'''
-                    CREATE TABLE users (
-                        id TEXT NOT NULL UNIQUE PRIMARY KEY,
-                        first_name TEXT NOT NULL,
-                        last_name TEXT NOT NULL,
-                        email TEXT NOT NULL UNIQUE,
-                        password TEXT NOT NULL,
-                        avatar TEXT NOT NULL,
-                    )
-                ''')
-                Database.instance.commit()
-            except sqlite3.Error as er:
-                raise er
-        else:
-            raise Exception("Database Not Connected")
+def g_uuid():
+    return str(uuid4())
 
-    def create(self, first_name: str, last_name: str, email: str, password: str, avatar: str):
-        if Database.instance and Database.cur:
-            try:
-                Database.cur.execute(f'''
-                    INSERT INTO users VALUES(
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                        ?,
-                    )
-                ''', (uuid4(), first_name, last_name, email, password, avatar))
-                Database.instance.commit()
-            except sqlite3.Error as er:
-                raise er
-        else:
-            raise Exception("Database Not Connected")
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(String, primary_key=True, default=g_uuid)
+    first_name = Column(String)
+    last_name = Column(String)
+    email = Column(String, unique=True)
+    password = Column(String)
+    avatar = Column(String)

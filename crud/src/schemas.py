@@ -10,3 +10,6 @@ class UserOut(BaseModel):
     last_name: str
     email: EmailStr
     avatar: str
+
+    class Config:
+        orm_mode = True
