@@ -12,3 +12,7 @@ class UserOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+class UserIn(BaseModel):
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
